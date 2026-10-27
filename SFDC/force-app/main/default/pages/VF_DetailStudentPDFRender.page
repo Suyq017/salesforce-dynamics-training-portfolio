@@ -1,0 +1,166 @@
+<!--
+* ページ名  ：VF_DetailStudent
+* 機能名    ：学生詳細ページ
+* @created ：2026/07/17 Nguyen Ngoc Quy
+* @modified：
+-->
+<apex:page controller="VF_DetailStudentPDFRenderCtrl" renderAs="pdf">
+    <apex:outputPanel layout="block" rendered="{!NOT(ISNULL(studentRecord))}">
+        <header>
+            <p style = "font-family: Arial Unicode MS; font-size: 24px; text-align:center">学生の詳細</p>
+        </header>
+        <apex:messages style="font-family: Arial Unicode MS"/>
+        <table style="width: 100%; table-layout: fixed;">
+            <tr>
+                <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+                    <apex:outputText style="font-family: Arial Unicode MS" value="学生コード" />
+                    <br/>
+                    <apex:outputField style="font-family: Arial Unicode MS" value="{!studentRecord.StudentCode__c}"/>
+
+                    <br/><br/>
+
+                    <apex:outputText style="font-family: Arial Unicode MS" value="名" />
+                    <br/>
+                    <apex:outputText style="font-family: Arial Unicode MS" value="{!studentFirstName}" escape="false" />
+
+                    <br/><br/>
+
+                    <apex:outputText style="font-family: Arial Unicode MS" value="姓" />
+                    <br/>
+                    <apex:outputText style="font-family: Arial Unicode MS" value ="{!studentLastName}" escape="false"/>
+                    
+                    <br/><br/>
+
+                    <apex:outputText style="font-family: Arial Unicode MS" value="生年月日" />
+                    <br/>
+                    <apex:outputText style="font-family: Arial Unicode MS" label="生年月日" value="{0,date, MM/dd/yyyy}">
+                        <apex:param value="{!studentRecord.Birthday__c}" />
+                    </apex:outputText> 
+                </td>
+                <td style="width: 50%; vertical-align: top; padding-left: 10px;">
+                    <apex:outputText style="font-family: Arial Unicode MS" value="性別" />
+                    <br/>
+                    <apex:outputText style="font-family: Arial Unicode MS" value="{!studentRecord.Gender__c}"/>
+
+                    <br/><br/>
+
+                    <apex:outputText style="font-family: Arial Unicode MS" value="クラス" />
+                    <br/>
+                    <apex:outputField style="font-family: Arial Unicode MS" value="{!studentRecord.Class_look__r.Name}"/>
+
+                    <br/><br/>
+
+                    <apex:outputText style="font-family: Arial Unicode MS" value="Status" />
+                    <br/>
+                    <apex:outputText style="font-family: Arial Unicode MS" value="{!studentRecord.LearningStatus__c}"/>
+                </td>
+            </tr>
+        </table>
+
+        <apex:outputPanel rendered = "{!NOT(ISNULL(semestersMap))}">
+
+            <header>
+                <p style = "font-family: Arial Unicode MS; font-size: 24px; text-align:center">学習成果</p>
+            </header>
+
+            <br/>
+
+            <table style="width: 100%; table-layout: fixed;">
+                <tr>
+                    <td style="width: 50%; vertical-align: top; padding-right: 10px;">
+                        <apex:outputText style="font-family: Arial Unicode MS" value="合計クレジット " />
+                        <apex:outputText style="font-weight: bold;" value="{!student[0].TotalCredit__c}"/>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; padding-left: 10px;">
+                        <apex:outputText style="font-family: Arial Unicode MS" value="平均学分绩点 " />
+                        <apex:outputText style="font-weight: bold;" value="{!student[0].GPAScore__c}"/>
+                    </td>
+                </tr>
+            </table>
+
+            <apex:repeat value="{!semestersMap}" var="semester">
+                <apex:outputPanel layout="block">
+                    <header>
+                        <apex:outputText style = "font-family: Arial Unicode MS; text-align:center; color:blue" 
+                                        value ="{!semestersMap[semester].Name}"/>
+                    </header>
+
+                    <br/>
+
+                    <table style="width: 100%; table-layout: fixed; border-collapse: collapse;">
+                        <thead>
+                            <tr style = "background-color: #e1e6eb;">
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 15%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small; border-left: 0.5px solid gray;">科目コード</th>
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 25%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small;">科目名</th>
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 10%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small; text-align: center;">クレジット</th>
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 10%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small; text-align: center;">進捗点</th>
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 10%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small; text-align: center;">実技点</th>
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 10%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small; text-align: center;">中間試験点</th>
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 10%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small; text-align: center;">期末試験点</th>
+                                <th scope="col"  style = "font-family: Arial Unicode MS; width: 10%; border-bottom : 0.5px solid gray; border-top: 0.5px solid gray; font-size: small; text-align: center; border-right: 0.5px solid gray;">科目平均点</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <apex:repeat value="{!semestersMap[semester].SubjectScores__r}" var="subject">
+                                <tr>
+                                    <td style = "border-bottom : 0.5px solid gray; border-left: 0.5px solid gray;">
+                                        <apex:outputText value="{!subject['Subject_look__r'].SubjectCode__c}"/>
+                                    </td>
+
+                                    <td style = "border-bottom : 0.5px solid gray;">
+                                        <apex:outputText value="{!subject['Subject_look__r'].Name}" escape = "false"/>
+                                    </td>
+
+                                    <td style = "border-bottom : 0.5px solid gray; text-align: center;">
+                                        <apex:outputText value="{!subject['Subject_look__r'].CourseCredit__c}"/>
+                                    </td>
+
+                                    <td style = "border-bottom : 0.5px solid gray; text-align: center;">
+                                        <apex:outputText value="{!subject['Score__r']['Progress']}"/>
+                                    </td>
+
+                                    <td style = "border-bottom : 0.5px solid gray; text-align: center;">
+                                        <apex:outputText value="{!subject['Score__r']['Practical']}"/>
+                                    </td>
+
+                                    <td style = "border-bottom : 0.5px solid gray; text-align: center;">
+                                        <apex:outputText value="{!subject['Score__r']['Midterm Exam']}"/>
+                                    </td>
+
+                                    <td style = "border-bottom : 0.5px solid gray; text-align: center;">
+                                        <apex:outputText value="{!subject['Score__r']['FinalTerm Exam']}"/>
+                                    </td>
+
+                                    <td style = "border-bottom : 0.5px solid gray; text-align: center; border-right: 0.5px solid gray;">
+                                        <apex:outputText value="{!subject['AverageScore__c']}" style = "{!IF(subject['Status__c'] = 'Passed', 'color: black;', 'color: red;')}"/>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                            <tr>
+                                <td style = "border-bottom : 0.5px solid gray; border-left: 0.5px solid gray;"></td>
+                                <td style = "border-bottom : 0.5px solid gray;"><apex:outputText style = "font-family: Arial Unicode MS" value="学期平均点"></apex:outputText></td>
+                                <td style = "border-bottom : 0.5px solid gray; text-align: center;">
+                                    <apex:outputText value="{!semestersMap[semester]['totalSemesterCredit']}" />
+                                </td>
+                                <td style = "border-bottom : 0.5px solid gray;"></td>
+                                <td style = "border-bottom : 0.5px solid gray;"></td>
+                                <td style = "border-bottom : 0.5px solid gray;"></td>
+                                <td style = "border-bottom : 0.5px solid gray;"></td>
+                                <td style = "border-bottom : 0.5px solid gray; text-align: center; border-right: 0.5px solid gray;">
+                                    <apex:outputText value="{!semestersMap[semester]['averageScore']}" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br/>
+                </apex:outputPanel>
+
+            </apex:repeat>
+
+        </apex:outputPanel>
+        
+    </apex:outputPanel>
+            
+</apex:page>

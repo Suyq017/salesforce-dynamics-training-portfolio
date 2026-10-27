@@ -1,0 +1,153 @@
+<!--
+ * lwc_ScoreTable.html
+ * 学習成果を表示するためのLWCコンポーネントのHTMLテンプレートです。
+ * @created 2026/06/24 Nguyen Ngoc Quy
+ * @modified 2026/07/20 Nguyen Ngoc Quy
+ -->
+<template>
+    <lightning-card title="学習成果" lwc:if={hasScoreData}>
+        <div class="slds-grid slds-gutters slds-grid_vertical-align-center slds-grid_align-spread">
+            <div class="slds-grid">
+                <div class="slds-col slds-grid_vertical-align-center slds-grid_align-start slds-m-right_large">
+                    <lightning-formatted-text value="合計クレジット "></lightning-formatted-text>
+                    <!-- 2026/07/09 Nguyen Ngoc Quy Modify Start -->
+                    <!-- <lightning-formatted-text value={totalCreditDisplay} 
+                                            class="slds-text-title_bold">
+                    </lightning-formatted-text> -->
+                    <lightning-formatted-number value={totalCreditDisplay} 
+                                                class="slds-text-title_bold"
+                                                minimum-fraction-digits="0">
+                    </lightning-formatted-number>
+                    <!-- 2026/07/09 Nguyen Ngoc Quy Modify End -->
+                </div>
+                
+                <div class="slds-col slds-grid_vertical-align-center slds-grid_align-start">
+                    <lightning-formatted-text value="平均学分绩点 "></lightning-formatted-text>
+                    <!-- 2026/07/09 Nguyen Ngoc Quy Modify Start -->
+                    <!-- <lightning-formatted-text value={gpaScoreDisplay}
+                                            class="slds-text-title_bold">
+                    </lightning-formatted-text> -->
+                    <lightning-formatted-number value={gpaScoreDisplay}
+                                                class="slds-text-title_bold"
+                                                minimum-fraction-digits="2" 
+                                                maximum-fraction-digits="2">
+                    </lightning-formatted-number>
+                    <!-- 2026/07/09 Nguyen Ngoc Quy Modify End -->
+                </div>
+            </div>
+            
+            <div class="slds-grid">
+                <div class="slds-col slds-grid_vertical-align-center slds-grid_align-end">
+                    <!-- 2026/07/20 Nguyen Ngoc Quy Modify Start -->
+                    <!-- <lightning-button label="PDF出力" 
+                                    variant="brand">
+                    </lightning-button> -->
+                    <lightning-button label="PDF出力" 
+                                    variant="brand"
+                                    onclick={handleOpenPDF}>
+                    </lightning-button>
+                    <!-- 2026/07/20 Nguyen Ngoc Quy Modify End -->
+                </div>
+
+                <div class="slds-col slds-grid_vertical-align-center slds-grid_align-end">
+                    <lightning-combobox name="semesterFilter" 
+                                        value={selectedSemester} 
+                                        options={semestersOptionsCombobox} 
+                                        onchange={handleSemesterChange}
+                                        variant="label-hidden"
+                                        placeholder="全て">
+                    </lightning-combobox>
+                </div>
+            </div>
+            
+        </div>
+
+        <template for:each={semestersListShown} for:item="semester">
+            <lightning-formatted-text key={semester.Id} value={semester.Name} class="slds-truncate slds-text-link slds-text-title_bold">
+            </lightning-formatted-text>
+            <table key={semester.Id} class="slds-table_bordered slds-m-bottom_large score-table">
+                <thead>
+                    <tr class="tableHeader">
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="15%">科目コード</th>
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="25%">科目名</th>
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="10%">クレジット</th>
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="10%">進捗点</th>
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="10%">実技点</th>
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="10%">中間試験点</th>
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="10%">期末試験点</th>
+                        <th scope="col" class="slds-border_bottom slds-text-align_center" width="10%">科目平均点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={semester.SubjectScores__r} for:item="subject">
+                        <tr key={subject.Id}>
+                            <td class="slds-text-align_center">{subject.Subject_look__r.SubjectCode__c}</td>
+                            <td class="slds-text-align_left">{subject.Subject_look__r.Name}</td>
+                            <!-- 2026/07/09 Nguyen Ngoc Quy Modify Start -->
+                            <!-- <td class="slds-text-align_center">{subject.Subject_look__r.CourseCredit__c}</td> -->
+                            <td class="slds-text-align_center">
+                                <lightning-formatted-number value={subject.Subject_look__r.CourseCredit__c} maximum-fraction-digits="0"></lightning-formatted-number>
+                            </td>
+
+                            <!-- <td class="slds-text-align_center">{subject.progressScore}</td> -->
+                            <td class="slds-text-align_center">
+                                <lightning-formatted-number value={subject.progressScore} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
+                            </td>
+
+                            <!-- <td class="slds-text-align_center">{subject.practicalScore}</td> -->
+                            <td class="slds-text-align_center">
+                                <lightning-formatted-number value={subject.practicalScore} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
+                            </td>
+
+                            <!-- <td class="slds-text-align_center">{subject.midtermScore}</td> -->
+                            <td class="slds-text-align_center">
+                                <lightning-formatted-number value={subject.midtermScore} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
+                            </td>
+
+                            <!-- <td class="slds-text-align_center">{subject.finalScore}</td> -->
+                            <td class="slds-text-align_center">
+                                <lightning-formatted-number value={subject.finalScore} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
+                            </td>
+
+                            <!-- <td class={subject.averageScoreStyleClass}>{subject.AverageScore__c}</td> -->
+                            <td class={subject.averageScoreStyleClass}>
+                                <lightning-formatted-number value={subject.AverageScore__c} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
+                            </td>
+                            <!-- 2026/07/09 Nguyen Ngoc Quy Modify End -->
+                        </tr>
+                    </template>
+                    <tr>
+                        <td></td>
+                        <td><lightning-formatted-text value="学期平均点" class="slds-text-title_bold"></lightning-formatted-text></td>
+                        <!-- 2026/07/09 Nguyen Ngoc Quy Modify Start -->
+                        <!-- <td class="slds-text-align_center">{semester.totalSemesterCredit}</td> -->
+                        <td class="slds-text-align_center">
+                            <lightning-formatted-number value={semester.totalSemesterCredit} maximum-fraction-digits="0"></lightning-formatted-number>
+                        </td>
+                        <!-- 2026/07/09 Nguyen Ngoc Quy Modify End -->
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="slds-text-align_center">
+                            <!-- 2026/07/09 Nguyen Ngoc Quy Modify Start -->
+                            <!-- {semester.averageScore} -->
+                            <lightning-formatted-number value={semester.averageScore} minimum-fraction-digits="2" maximum-fraction-digits="2"></lightning-formatted-number>
+                            <!-- 2026/07/09 Nguyen Ngoc Quy Modify End -->
+                            <lightning-helptext content={semester.rank}></lightning-helptext>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template lwc:if={showMoreSemestersDataButton}>
+            <lightning-button label="さらに表示"
+                            onclick={handleLoadMoreSemesterData}
+                            variant="base"
+                            class="slds-m-top_medium slds-align_absolute-center">
+            </lightning-button>
+        </template>
+
+    </lightning-card>
+</template>

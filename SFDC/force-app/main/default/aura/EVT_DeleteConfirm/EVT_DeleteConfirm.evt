@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION" description="Event to confirm delete a student">
+    <aura:attribute name="Confirm" type="Boolean"/>
+    <aura:attribute name="studentIds" type="List"/>
+</aura:event>

@@ -1,0 +1,30 @@
+<!--
+* ページ名：   VF_UpdateStudent
+* 機能名：  　 学生更新ページ
+* @created： 2026/06/08 Nguyen Ngoc Quy
+* @modified： 2026/06/08 Nguyen Ngoc Quy
+-->
+<apex:page controller="VF_UpdateStudentCtrl">
+    <!-- Header -->
+    <apex:sectionHeader title="学生更新" />
+    <apex:messages />
+    <!-- Form -->
+    <apex:form >
+        <apex:pageBlock mode="edit">
+            <apex:pageBlockSection columns="1">
+                <apex:inputField value="{!student[0].LastName__c}" required="true"/>
+                <apex:inputField value="{!student[0].FirstName__c}" required="true"/>
+                <apex:inputField value="{!student[0].Birthday__c}" required="true"/>
+                <apex:inputField value="{!student[0].Gender__c}" required="true"/>
+                <apex:inputField value="{!student[0].Class_look__c}" required="true"/>
+                <apex:inputField value="{!student[0].LearningStatus__c}" required="true"/>
+                <apex:pageblockSectionItem >
+                    <apex:outputPanel layout="none">
+                        <apex:commandButton value="キャンセル" styleClass="close-button" action="{!returnToSearchPage}" immediate="true"/>
+                        <apex:commandButton value="保存" styleClass="save-button" action="{!updateStudent}" />
+                    </apex:outputPanel>
+                </apex:pageblockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

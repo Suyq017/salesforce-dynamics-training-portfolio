@@ -1,0 +1,97 @@
+<aura:component>
+
+    <aura:attribute name="totalRecords" type="Integer"/>
+    <aura:attribute name="totalPages" type="Integer"/>
+    <aura:attribute name="currentPage" type="Integer"/>
+    <aura:attribute name="pageNums" type="List"/>
+    <aura:attribute name="currentPageListStudents" type="List"/>
+    <aura:attribute name="allSelected" type="Boolean" default="false"/>
+    <aura:attribute name="selectedStudentsCount" type="Integer" default="0"/>
+    <aura:attribute name="studentsList" type="List"/>
+
+    <aura:method name="openSearchStudentTable" action="{!c.openSearchStudentTable}">
+        <aura:attribute name="totalRecords" type="Integer"/>
+        <aura:attribute name="totalPages" type="Integer"/>
+        <aura:attribute name="currentPage" type="Integer"/>
+        <aura:attribute name="pageNums" type="List"/>
+        <aura:attribute name="currentPageListStudents" type="List"/>
+        <aura:attribute name="allSelected" type="Boolean" default="false"/>
+        <aura:attribute name="selectedStudentsCount" type="Integer" default="0"/>
+        <aura:attribute name="studentsList" type="List"/>
+    </aura:method>
+
+    <div style="height: 250px; overflow-y: auto;">                
+        <table class="slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout" table-layout="fixed">
+            <thead>
+                <tr>
+                    <th scope="col" class="slds-border_bottom" width="5%">
+                        <lightning:input type="checkbox" 
+                                    name="selectAll" 
+                                    checked="{!v.allSelected}"
+                                    onchange="{!c.handleSelectAll}"/>
+                    </th>
+                    <th scope="col" class="slds-border_bottom" width="10%">学生コード</th>
+                    <th scope="col" class="slds-border_bottom" width="15%">姓</th>
+                    <th scope="col" class="slds-border_bottom" width="15%">名</th>
+                    <th scope="col" class="slds-border_bottom" width="15%">生年月日</th>
+                    <th scope="col" class="slds-border_bottom" width="10%">性別</th>
+                    <th scope="col" class="slds-border_bottom" width="15%">クラス</th>
+                    <th scope="col" class="slds-border_bottom" width="15%">アクション</th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.currentPageListStudents}" var="student">
+                    <tr>
+                        <td><lightning:input type="checkbox" 
+                                            name="{!student.Id}" 
+                                            checked="{!student.isSelected}"
+                                            onchange="{!c.handleSelectStudent}"/>
+                        </td>
+                        <td><lightning:button label="{!student.StudentCode__c}" 
+                                            variant="base"
+                                            name="viewDetailFromCode"
+                                            value="{!student.Id}"
+                                            onclick="{!c.handleViewDetail}"/>
+                        </td>
+                        <td >{!student.Lastname__c}</td>
+                        <td>{!student.Firstname__c}</td>
+                        <td>{!student.Birthday__c}</td>
+                        <td>{!student.Gender__c}</td>
+                        <td>{!student.Class_look__r.Name}</td>
+                        <td>    
+                            <lightning:button iconName="utility:preview" 
+                                            variant="base" 
+                                            onclick="{!c.handleViewDetail}"
+                                            value="{!student.Id}"
+                                            name="viewDetailFromIcon"/>
+                            <lightning:button iconName="utility:edit" 
+                                            variant="base" 
+                                            onclick="{!c.handleViewUpdate}"
+                                            value="{!student.Id}"/>
+                            <lightning:button iconName="utility:delete" 
+                                            variant="base" 
+                                            onclick="{!c.handleDeleteStudent}"
+                                            name="deleteSpecificIdStudent"
+                                            value="{!student.Id}"/>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    Selected {!v.selectedStudentsCount} / {!v.totalRecords}
+    </div>
+
+    <lightning:layout horizontalAlign="center" pullToBoundary="small"> 
+        <lightning:button label="&lt;&lt;" variant="neutral" onclick="{!c.handleFirstPage}" disabled="{!v.currentPage == 1}"/>
+        <lightning:button label="&lt;" variant="neutral" onclick="{!c.handlePreviousPage}" disabled="{!v.currentPage == 1}"/>
+        <aura:iteration items="{!v.pageNums}" var="pageNum">
+            <lightning:button label="{!pageNum}" 
+                                variant="{!(pageNum == v.currentPage) ? 'brand' : 'neutral'}" 
+                                onclick="{!c.handlePageChange}"
+                                value="{!pageNum}"/>
+        </aura:iteration>
+        <lightning:button label="&gt;" variant="neutral" onclick="{!c.handleNextPage}" disabled="{!v.currentPage == v.totalPages}"/>
+        <lightning:button label="&gt;&gt;" variant="neutral" onclick="{!c.handleLastPage}" disabled="{!v.currentPage == v.totalPages}"/>
+    </lightning:layout>
+    
+</aura:component>

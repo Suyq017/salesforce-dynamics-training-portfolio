@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="StudentScreenNamespace" 
+  constructor="StudentScreenControl" 
+  version="0.0.1" 
+  display-name-key="StudentScreenControl" 
+  description-key="StudentScreenControl description" 
+  control-type="standard">
+    <external-service-usage enabled="false">
+    </external-service-usage>
+    <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
+    <data-set name="studentList" display-name-key="Student List" />
+    <property name="ksvc_tra_studentname" display-name-key="Student Name" of-type="SingleLine.Text" usage="input" required="false"/>
+    <property name="ksvc_opt_learningstatus" display-name-key="Learning Status" of-type="OptionSet" usage="input" required="false"/>
+    <property name="ksvc_lup_class" display-name-key="Class" of-type="Lookup.Simple" usage="input" required="false"/>
+    <property name="ksvc_opt_gender" display-name-key="Gender" of-type="OptionSet" usage="input"/>
+    <property name="ksvc_int_totalcredit" display-name-key="Total Credit" of-type="Decimal" usage="input"/>
+    <property name="ksvc_dcn_gpascore" display-name-key="GPA" of-type="Decimal" usage="input"/>
+    <property name="ksvc_opt_classification" display-name-key="Classification" of-type="OptionSet" usage="input"/>
+    <property name="ksvc_dat_birthday" display-name-key="Birthday" of-type="DateAndTime.DateOnly" usage="input"/>
+    <!-- <data-set name= "sampleDataSet" display-name-key="Sample Data Set"/> -->
+    <resources>
+      <code path="index.ts" order="1"/>
+      <css path="css/StudentScreenControl.css"
+   order="1" />
+    </resources>
+
+    <feature-usage>
+      <uses-feature name="WebAPI" required="true"/>
+    </feature-usage>
+  </control>
+</manifest>

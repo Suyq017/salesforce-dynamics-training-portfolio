@@ -1,0 +1,134 @@
+<aura:component>
+    <aura:attribute name="studentCodeSearch" type="String"/>
+    <aura:attribute name="studentNameSearch" type="String"/>
+    <aura:attribute name="classSearch" type="String"/>
+    <aura:attribute name="genderSearch" type="String"/>
+    <aura:attribute name="birthdaySearch" type="String"/>
+    <aura:attribute name="dayOfBirthSearch" type="String"/>
+    <aura:attribute name="monthOfBirthSearch" type="String"/>
+    <aura:attribute name="yearOfBirthSearch" type="String"/>
+    <aura:attribute name="classOptions" type="List"/>
+    <aura:attribute name="genderOptions" type="List"/>
+    <aura:attribute name="dayOptions" type="List"/>
+    <aura:attribute name="monthOptions" type="List"/>
+    <aura:attribute name="yearOptions" type="List"/>
+    <aura:attribute name="isAnySearchkey" type="Boolean" default="false"/>
+    <aura:attribute name="selectedStudentsCount" type="Integer" default="0"/>
+
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:registerEvent name="EVT_Search" type="c:EVT_Search"/>
+    <aura:method name="openSearchStudentModal" action="{!c.openSearchStudentModal}">
+        <aura:attribute name="genderOptions" type="List"/>
+        <aura:attribute name="classOptions" type="List"/>
+        <aura:attribute name="dayOptions" type="List"/>
+        <aura:attribute name="monthOptions" type="List"/>
+        <aura:attribute name="yearOptions" type="List"/>
+        <aura:attribute name="isAnySearchkey" type="Boolean" default="false"/>
+        <aura:attribute name="selectedStudentsCount" type="Integer" default="0"/>
+    </aura:method>
+
+    <lightning:layout multipleRows="true">
+
+            <lightning:input name="studentCodeSearch"
+                        label="学生コード"
+                        value="{!v.studentCodeSearch}"
+                        class="slds-m-right_medium"
+                        onchange="{!c.handleSearchChange}"/>
+
+            <lightning:input name="studentNameSearch"
+                        label="名前"
+                        value="{!v.studentNameSearch}"
+                        class="slds-m-right_medium"
+                        onchange="{!c.handleSearchChange}"/>
+
+            <lightning:select name="classSearch"
+                            label="クラス"
+                            value="{!v.classSearch}"
+                            class="slds-m-right_medium"
+                            onchange="{!c.handleSearchChange}">
+                <option value="">--なし--</option>
+                <aura:iteration items="{!v.classOptions}" var="option">
+                    <option value="{!option.value}" label="{!option.label}"/>
+                </aura:iteration>
+            </lightning:select>
+
+            <lightning:select name="genderSearch"
+                        label="性別"
+                        value="{!v.genderSearch}"
+                        class="slds-m-right_medium"
+                        onchange="{!c.handleSearchChange}">
+                <option value="">--なし--</option>
+                <aura:iteration items="{!v.genderOptions}" var="option">
+                    <option value="{!option.value}" label="{!option.label}"/>
+                </aura:iteration>
+            </lightning:select>
+
+            <lightning:input name="birthdaySearch"
+                        label="生年月日"
+                        type="date"
+                        dateStyle="short"
+                        value="{!v.birthdaySearch}"
+                        class="slds-m-right_medium"
+                        onchange="{!c.handleBirthdayChange}"/>
+                        
+            <lightning:select name="dayOfBirthSearch"
+                        label="日生"
+                        value="{!v.dayOfBirthSearch}"
+                        class="slds-m-right_medium"
+                        onchange="{!c.handleDateChange}">
+                <option value="">--なし--</option>
+                <aura:iteration items="{!v.dayOptions}" var="option">
+                    <option value="{!option.value}" label="{!option.label}"/>
+                </aura:iteration>
+            </lightning:select>
+
+            <lightning:select name="monthOfBirthSearch"
+                        label="月生"
+                        value="{!v.monthOfBirthSearch}"
+                        class="slds-m-right_medium"
+                        onchange="{!c.handleDateChange}">
+                <option value="">--なし--</option>
+                <aura:iteration items="{!v.monthOptions}" var="option">
+                    <option value="{!option.value}" label="{!option.label}"/>
+                </aura:iteration>
+            </lightning:select>
+
+            <lightning:select name="yearOfBirthSearch"
+                        label="年生"
+                        value="{!v.yearOfBirthSearch}"
+                        class="slds-m-right_medium"
+                        onchange="{!c.handleDateChange}">
+                <option value="">--なし--</option>
+                <aura:iteration items="{!v.yearOptions}" var="option">
+                    <option value="{!option.value}" label="{!option.label}"/>
+                </aura:iteration>
+            </lightning:select>
+
+    </lightning:layout>
+
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small">
+            <lightning:button iconName="utility:search" 
+                                label="検索" 
+                                variant="brand" 
+                                onclick="{!c.handleSearch}"/>
+            <lightning:button iconName="utility:add" 
+                                label="作成" 
+                                variant="neutral" 
+                                onclick="{!c.handleCreateStudent}"/>
+            <lightning:button iconName="utility:clear" 
+                                label="クリア" 
+                                variant="neutral" 
+                                onclick="{!c.handleClearSearch}"
+                                disabled="{!v.isAnySearchkey == false}"/>
+            <lightning:button iconName="utility:delete" 
+                                    label="削除" 
+                                variant="neutral" 
+                                onclick="{!c.handleDeleteStudent}"
+                                name="deleteListSelectedStudents"
+                                disabled="{!v.selectedStudentsCount == 0}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

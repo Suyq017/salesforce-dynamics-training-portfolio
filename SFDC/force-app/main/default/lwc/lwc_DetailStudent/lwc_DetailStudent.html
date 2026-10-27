@@ -1,0 +1,101 @@
+<!--
+ * lwc_DetailStudent.html
+ * 学生情報の詳細を表示するためのLWCコンポーネントのHTMLテンプレートです。
+ * @created 2026/06/19 Nguyen Ngoc Quy
+ -->
+<template>
+    <template lwc:if={isOpened}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container slds-p-top_x-small slds-p-bottom_x-small modalBody">
+
+                
+
+                    <button class="slds-button slds-button_icon slds-modal__close" onclick={handleClose} aria-hidden="true">
+                        <lightning-icon size="small" icon-name="utility:close" alternative-text="Close"></lightning-icon>
+                    </button>
+
+                    <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">学生詳細</h1>
+                    </div>
+
+                    <div class="slds-modal__content slds-p-around_medium modalContent" id="modal-content-id-1">
+                        
+                        <template lwc:if={spinner}>
+                            <div class="slds-is-relative spinner">
+                                <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+                            </div>
+                        </template>
+
+                    <template lwc:if={student}>
+
+                        <lightning-layout multiple-rows="true">
+                            
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-formatted-text value="学生コード" class="slds-text-title_bold"></lightning-formatted-text>
+                                <br/> 
+                                <lightning-formatted-text value={student.StudentCode__c}></lightning-formatted-text>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-formatted-text value="性別" class="slds-text-title_bold"></lightning-formatted-text>
+                                <br/> 
+                                <lightning-formatted-text value={student.Gender__c}></lightning-formatted-text>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-formatted-text value="姓" class="slds-text-title_bold"></lightning-formatted-text>
+                                <br/> 
+                                <lightning-formatted-text value={student.Lastname__c}></lightning-formatted-text>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-formatted-text value="クラス" class="slds-text-title_bold"></lightning-formatted-text>
+                                <br/>
+                                <lightning-button label={className}
+                                                    variant="base"
+                                                    onclick={openClassPage}></lightning-button>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-formatted-text value="名" class="slds-text-title_bold"></lightning-formatted-text>
+                                <br/> 
+                                <lightning-formatted-text value={student.Firstname__c}></lightning-formatted-text>
+                            </lightning-layout-item>
+                            
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-formatted-text value="Status" class="slds-text-title_bold"></lightning-formatted-text>
+                                <br/> 
+                                <lightning-formatted-text value={student.LearningStatus__c}></lightning-formatted-text>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="6" padding="around-small">
+                                <lightning-formatted-text value="生年月日" class="slds-text-title_bold"></lightning-formatted-text>
+                                <br/> 
+                                <lightning-formatted-date-time value={student.Birthday__c} 
+                                                                year="numeric" 
+                                                                month="2-digit" 
+                                                                day="2-digit"></lightning-formatted-date-time>
+                            </lightning-layout-item>
+                        </lightning-layout>
+
+                        <c-lwc_-score-table student-id={studentId}
+                                            total-credit={student.TotalCredit__c}
+                                            gpa-score={student.GPAScore__c}></c-lwc_-score-table>
+
+                    </template>
+
+                    </div>
+
+                    <div class="slds-modal__footer slds-modal__footer_directional">
+                        <lightning-layout horizontal-align="end">
+                            <lightning-layout-item>
+                                <lightning-button label="閉じる" onclick={handleClose}></lightning-button>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+            </div>
+        </section>
+        
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>

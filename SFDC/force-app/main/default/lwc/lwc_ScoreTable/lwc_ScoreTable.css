@@ -1,0 +1,11 @@
+.failScore {
+    color: red;
+}
+.tableHeader {
+    background-color: #e1e6eb;
+}
+
+.score-table {
+    width: 100%;
+    table-layout: fixed;
+}

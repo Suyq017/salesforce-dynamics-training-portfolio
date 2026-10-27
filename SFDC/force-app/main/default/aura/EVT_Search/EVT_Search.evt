@@ -1,0 +1,10 @@
+<aura:event type="COMPONENT" description="Event template">
+    <aura:attribute name="studentCodeSearch" type="String" />
+    <aura:attribute name="studentNameSearch" type="String" />
+    <aura:attribute name="classSearch" type="String" />
+    <aura:attribute name="genderSearch" type="String" />
+    <aura:attribute name="birthdaySearch" type="String" />
+    <aura:attribute name="dayOfBirthSearch" type="String" />
+    <aura:attribute name="monthOfBirthSearch" type="String" />
+    <aura:attribute name="yearOfBirthSearch" type="Integer" />
+</aura:event>

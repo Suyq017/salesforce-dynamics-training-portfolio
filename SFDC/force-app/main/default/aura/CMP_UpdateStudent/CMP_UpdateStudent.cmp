@@ -1,0 +1,114 @@
+<aura:component controller="CMP_UpdateStudentCtrl" 
+                implements="force:appHostable">
+    
+    <aura:attribute name="student" type="Student__c"/>
+    <aura:attribute name="genderOptions" type="List"/>
+    <aura:attribute name="classOptions" type="List"/>
+    <aura:attribute name="learningStatusOptions" type="List"/>
+    <aura:attribute name="spinner" type="Boolean" default="false"/>
+    <aura:attribute name="studentId" type="String"/>
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:card>
+
+        <aura:if isTrue="{!v.spinner}">
+            <div class="slds-spinner_container">
+                <lightning:spinner size="large" variant="brand"/>
+            </div>
+        </aura:if>
+
+        <lightning:layout horizontalAlign="center">
+                <lightning:layoutItem>
+                    <lightning:formattedText value="学生を編集"
+                                             class="slds-text-heading_medium"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <lightning:layout multipleRows="true" class="slds-p-horizontal_small inputField">
+
+            <lightning:layoutItem size="12">
+                <lightning:input label="姓" value="{!v.student.LastName__c}" 
+                                            required="true"
+                                            aura:id="requiredField"/>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="12">
+                <lightning:input label="名" value="{!v.student.FirstName__c}" 
+                                            required="true"
+                                            aura:id="requiredField"/>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="12">
+                <lightning:input label="生年月日" 
+                                 type="date" 
+                                 dateStyle="short" 
+                                 value="{!v.student.Birthday__c}" 
+                                 required="true"
+                                 aura:id="requiredField"/>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="12">
+                <lightning:select aura:id="requiredField" 
+                                  name="selectGender" 
+                                  label="性別" 
+                                  required="true" 
+                                  value="{!v.student.Gender__c}">
+                    <aura:if isTrue="{!empty(v.student.Gender__c)}">
+                        <option value="" label=" --なし--"/>
+                    </aura:if>
+                    <aura:iteration items="{!v.genderOptions}" var="option">
+                        <option value="{!option.value}" label="{!option.label}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="12">
+                <lightning:select aura:id="requiredField" 
+                                  name="selectClass" 
+                                  label="クラス" 
+                                  required="true" 
+                                  value="{!v.student.Class_look__c}">
+                    <aura:if isTrue="{!empty(v.student.Class_look__c)}">
+                        <option value="" label=" --なし--"/>
+                    </aura:if>
+                    <aura:iteration items="{!v.classOptions}" var="option">
+                        <option value="{!option.value}" label="{!option.label}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="12">
+                <lightning:select aura:id="requiredField" 
+                                name="selectLearningStatus" 
+                                label="学習状況" 
+                                required="true" 
+                                value="{!v.student.LearningStatus__c}">
+                    <aura:if isTrue="{!empty(v.student.LearningStatus__c)}">
+                        <option value="" label=" --なし--"/>
+                    </aura:if>
+                    <aura:iteration items="{!v.learningStatusOptions}" var="option">
+                        <option value="{!option.value}" label="{!option.label}"/>
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+            
+        </lightning:layout>
+
+        <aura:set attribute="footer">
+            <lightning:layout>
+                <lightning:layoutItem size="12" class="slds-text-align_right slds-m-top_medium">
+                    <lightning:button variant="neutral" 
+                                      label="キャンセル" 
+                                      onclick="{!c.handleBack}"
+                                      class="slds-m-right_small"/>
+                    <lightning:button variant="brand" 
+                                      label="保存" 
+                                      onclick="{!c.handleSave}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:set>
+    </lightning:card>
+
+</aura:component>

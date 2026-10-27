@@ -1,0 +1,70 @@
+<aura:component controller="CMP_SearchStudentCtrl" 
+                implements="force:appHostable, lightning:isUrlAddressable">
+
+    <!-- Search Key Attributes -->
+    <aura:attribute name="studentCodeSearch" type="String"/>
+    <aura:attribute name="studentNameSearch" type="String"/>
+    <aura:attribute name="classSearch" type="String"/>
+    <aura:attribute name="genderSearch" type="String"/>
+    <aura:attribute name="birthdaySearch" type="Date"/>
+    <aura:attribute name="dayOfBirthSearch" type="String"/>
+    <aura:attribute name="monthOfBirthSearch" type="String"/>
+    <aura:attribute name="yearOfBirthSearch" type="String"/>
+    <!-- Option List Attributes -->
+    <aura:attribute name="genderOptions" type="List"/>
+    <aura:attribute name="classOptions" type="List"/>
+    <aura:attribute name="dayOptions" type="List"/>
+    <aura:attribute name="monthOptions" type="List"/>
+    <aura:attribute name="yearOptions" type="List"/>
+
+    <!-- Data Attributes -->
+    <aura:attribute name="studentsList" type="List"/>
+    <aura:attribute name="currentPageListStudents" type="List"/>
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="totalPages" type="Integer" default="1"/>
+    <aura:attribute name="totalRecords" type="Integer" default="0"/>
+    <aura:attribute name="pageNums" type="List"/>
+    <aura:attribute name="selectedStudentsCount" type="Integer" default="0"/>
+    <aura:attribute name="isAnySearchkey" type="Boolean" default="false"/>
+
+    <!-- Boolean Attribute -->
+    <aura:attribute name="spinner" type="Boolean" default="false"/>
+    <aura:attribute name="allSelected" type="Boolean" default="false"/>
+
+    <!-- Custom settings attribute -->
+    <aura:attribute name="RecordPerPage" type="Integer" default="5"/>
+    <aura:attribute name="MaxRecord" type="Integer" default="2000"/>
+
+    <lightning:navigation aura:id="navService"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <aura:handler name="EVT_Search" event="c:EVT_Search" action="{!c.handleSearch}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initAction}"/>
+    <aura:handler event="c:EVT_DeleteConfirm" action="{!c.handleDeleteStudentEvent}"/>
+
+    <c:CMP_SearchFilter aura:id="searchFilter"
+    genderOptions="{!v.genderOptions}"
+    classOptions="{!v.classOptions}"
+    dayOptions="{!v.dayOptions}"
+    monthOptions="{!v.monthOptions}"
+    yearOptions="{!v.yearOptions}"
+    isAnySearchkey="{!v.isAnySearchkey}"
+    selectedStudentsCount="{!v.selectedStudentsCount}"
+    />
+    <c:CMP_SearchTable aura:id="searchTable" 
+    studentsList="{!v.studentsList}" 
+    totalPages="{!v.totalPages}" 
+    totalRecords="{!v.totalRecords}"
+    currentPage="{!v.currentPage}"
+    pageNums="{!v.pageNums}"
+    currentPageListStudents="{!v.currentPageListStudents}"
+    allSelected="{!v.allSelected}"
+    selectedStudentsCount="{!v.selectedStudentsCount}"/>
+
+     <aura:if isTrue="{!v.spinner}">
+        <div class="slds-spinner_container">
+            <lightning:spinner size="large" variant="brand"/>
+        </div>
+    </aura:if>
+
+</aura:component>

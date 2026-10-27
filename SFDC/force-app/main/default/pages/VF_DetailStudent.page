@@ -1,0 +1,28 @@
+<!--
+* ページ名：   VF_DetailStudent
+* 機能名：  　 学生詳細ページ
+* @created： 2026/06/03 Nguyen Ngoc Quy
+* @modified： 2026/06/05 Nguyen Ngoc Quy
+-->
+<apex:page controller="VF_DetailStudentCtrl">
+    <!-- Header -->
+    <apex:sectionHeader title="学生の詳細" />
+    <apex:messages/>
+    <!-- Form -->
+    <apex:form>
+        <apex:pageBlock mode="view">
+            <apex:pageBlockSection columns="2">
+                <apex:outputField value="{!student[0].StudentCode__c}"/>
+                <apex:outputField value="{!student[0].Gender__c}"/>
+                <apex:outputField value ="{!student[0].LastName__c}"/>
+                <apex:outputField value="{!student[0].Class_look__r.Name}"/>
+                <apex:outputField value="{!student[0].FirstName__c}"/>
+                <apex:outputField value="{!student[0].LearningStatus__c}"/>
+                <apex:outputText label="生年月日" value="{0,date, MM/dd/yyyy}">
+                    <apex:param value="{!student[0].Birthday__c}" />
+                </apex:outputText>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    <apex:commandButton value="閉じる" styleClass="close-button" action="{!returnToSearchPage}"/>
+    </apex:form>
+</apex:page>

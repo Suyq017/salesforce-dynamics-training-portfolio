@@ -1,0 +1,111 @@
+<!--
+ * lwc_SearchConditionStudent.html
+ * 学生検索条件コンポーネントのHTMLテンプレート
+ * @created 2026/06/29 Nguyen Ngoc Quy
+ -->
+<template>
+
+    <lightning-card>
+
+        <lightning-layout multiple-rows="true">
+
+                <lightning-input name="studentCode"
+                            label="学生コード"
+                            value={searchKey.studentCode}
+                            class="slds-m-right_medium"
+                            onchange={handleSearchKeyChange}>
+                </lightning-input>
+
+                <lightning-input name="studentName"
+                            label="名前"
+                            value={searchKey.studentName}
+                            class="slds-m-right_medium"
+                            onchange={handleSearchKeyChange}>
+                </lightning-input>
+
+                <lightning-combobox name="class"
+                                label="クラス"
+                                value={searchKey.class}
+                                class="slds-m-right_medium"
+                                onchange={handleSearchKeyChange}
+                                placeholder="--なし--"
+                                options={classOptions}>
+                </lightning-combobox>
+
+                <lightning-combobox name="gender"
+                            label="性別"
+                            value={searchKey.gender}
+                            class="slds-m-right_medium"
+                            onchange={handleSearchKeyChange}
+                            placeholder="--なし--"
+                            options={genderOptions}>
+                </lightning-combobox>
+
+                <lightning-input name="birthday"
+                            label="生年月日"
+                            type="date"
+                            date-style="short"
+                            value={searchKey.birthday}
+                            class="slds-m-right_medium"
+                            onchange={handleSearchKeyChange}>
+                </lightning-input>
+                            
+                <lightning-combobox name="dayOfBirth"
+                            label="日生"
+                            value={searchKey.dayOfBirth}
+                            class="slds-m-right_medium"
+                            onchange={handleSearchKeyChange}
+                            options={dayOptions}
+                            placeholder="--なし--">
+                </lightning-combobox>
+
+                <lightning-combobox name="monthOfBirth"
+                            label="月生"
+                            value={searchKey.monthOfBirth}
+                            class="slds-m-right_medium"
+                            onchange={handleSearchKeyChange}
+                            options={monthOptions}
+                            placeholder="--なし--">
+                </lightning-combobox>
+
+                <lightning-combobox name="yearOfBirth"
+                            label="年生"
+                            value={searchKey.yearOfBirth}
+                            class="slds-m-right_medium"
+                            onchange={handleSearchKeyChange}
+                            options={yearOptions}
+                            placeholder="--なし--">
+                </lightning-combobox>
+
+        </lightning-layout>
+
+        <lightning-layout>
+            <lightning-layout-item padding="around-small">
+                <lightning-button icon-name="utility:search" 
+                                    label="検索" 
+                                    variant="brand" 
+                                    onclick={handleSearch}>
+                </lightning-button>
+                <lightning-button icon-name="utility:add" 
+                                    label="作成" 
+                                    variant="neutral" 
+                                    onclick={openCreateStudentModal}>
+                </lightning-button>
+                <lightning-button icon-name="utility:clear" 
+                                    label="クリア" 
+                                    variant="neutral" 
+                                    onclick={handleClearSearch}
+                                    disabled={disableClearSearchButton}>
+                </lightning-button>
+                <lightning-button icon-name="utility:delete" 
+                                        label="削除" 
+                                    variant="neutral" 
+                                    onclick={openDeleteStudentConfirmationModal}
+                                    disabled={isNotAnySelectedStudent}>
+                </lightning-button>
+            </lightning-layout-item>
+        </lightning-layout>
+
+    </lightning-card>
+
+</template>

@@ -1,0 +1,17 @@
+<!--
+ * lwc_StudentScoreBatchLauncher.html
+ * 学生スコアバッチ起動コンポーネントのHTMLテンプレート
+ * @created 2026/07/06 Nguyen Ngoc Quy
+ -->
+<template>
+    <template lwc:if={spinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+    <lightning-card>
+        <lightning-button label="Start" 
+                        onclick={handleStartButtonClicked} 
+                        variant="brand" 
+                        class="slds-m-around_medium slds-align_absolute-center">
+        </lightning-button>
+    </lightning-card>
+</template>

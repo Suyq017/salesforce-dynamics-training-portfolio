@@ -1,0 +1,7 @@
+.table-result {
+    height: 250px;
+    overflow-y: auto;
+}
+.studentCodeViewDetail {
+    cursor: pointer;
+}

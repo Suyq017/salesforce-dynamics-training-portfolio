@@ -1,0 +1,92 @@
+<aura:component controller="CMP_DetailStudentCtrl" 
+                implements="force:appHostable, lightning:isUrlAddressable">
+
+    <aura:attribute name ="student" type="Student__c"/>
+    <aura:attribute name="spinner" type="Boolean" default="false"/>
+    <aura:attribute name="studentId" type="String"/>
+    <aura:attribute name="isModal" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <lightning:navigation aura:id="navService"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <aura:if isTrue="{!v.spinner}">
+        <div class="slds-spinner_container">
+            <lightning:spinner size="large" variant="brand"/>
+        </div>
+    </aura:if>
+    
+    <lightning:card>
+
+            <lightning:layout horizontalAlign="center">
+                <lightning:layoutItem>
+                    <lightning:formattedText value="学生詳細"
+                                            class="slds-text-heading_medium"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+
+            <lightning:layout multipleRows="true">
+            <lightning:LayoutItem size="6" padding="around-small">
+                <lightning:formattedText value="学生コード" class="slds-text-title_bold"/>
+                <br/> 
+                <lightning:formattedText value="{!v.student.StudentCode__c}"/>
+            </lightning:LayoutItem>
+
+            <lightning:LayoutItem size="6" padding="around-small">
+                <lightning:formattedText value="性別" class="slds-text-title_bold"/>
+                <br/> 
+                <lightning:formattedText value="{!v.student.Gender__c}"/>
+            </lightning:LayoutItem>
+
+            <lightning:LayoutItem size="6" padding="around-small">
+                <lightning:formattedText value="姓" class="slds-text-title_bold"/>
+                <br/> 
+                <lightning:formattedText value="{!v.student.LastName__c}"/>
+            </lightning:LayoutItem>
+
+            <lightning:layoutItem size="6" padding="around-small">
+                <lightning:formattedText value="クラス" class="slds-text-title_bold"/>
+                <br/>
+                <lightning:button label="{!v.student.Class_look__r.Name}"
+                                  variant="base"
+                                  onclick="{!c.openClassPage}"/>
+            </lightning:layoutItem>
+
+            <lightning:LayoutItem size="6" padding="around-small">
+                <lightning:formattedText value="名" class="slds-text-title_bold"/>
+                <br/> 
+                <lightning:formattedText value="{!v.student.FirstName__c}"/>
+            </lightning:LayoutItem>
+            
+            <lightning:LayoutItem size="6" padding="around-small">
+                <lightning:formattedText value="Status" class="slds-text-title_bold"/>
+                <br/> 
+                <lightning:formattedText value="{!v.student.LearningStatus__c}"/>
+            </lightning:LayoutItem>
+
+            <lightning:LayoutItem size="6" padding="around-small">
+                <lightning:formattedText value="生年月日" class="slds-text-title_bold"/>
+                <br/> 
+                <lightning:formattedDateTime value="{!v.student.Birthday__c}" 
+                                             year="numeric" 
+                                             month="2-digit" 
+                                             day="2-digit"/>
+            </lightning:LayoutItem>
+
+        </lightning:layout>
+
+        <aura:set attribute="footer">
+            <lightning:layout horizontalAlign="end">
+                <lightning:layoutItem>
+                    <lightning:button
+                        label="閉じる"
+                        onclick="{!c.handleClose}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:set>
+
+    </lightning:card>
+ 
+  
+</aura:component>

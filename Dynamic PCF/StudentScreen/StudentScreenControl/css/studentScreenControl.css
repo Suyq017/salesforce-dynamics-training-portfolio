@@ -1,0 +1,395 @@
+/* Container styles */
+.container {
+    max-width: 100%;
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+/* Search Input - Slightly shifted to the right */
+.search-input {
+    width: 250px; /* Fixed width for a clean look */
+    padding: 10px;
+    margin: 0;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-bar {
+    width: 95%;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Search Input - Focus effect */
+.search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Table Styling */
+table {
+    width: 95%;
+    margin: 20px auto;
+    background-color: #f8f9fa;
+    border-collapse: separate;
+    border-radius: 8px;
+    border: 1px solid black;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Table Header */
+table th {
+    padding: 12px;
+    text-align: left;
+    background: linear-gradient(135deg, #0099ff, #0077ff);
+    color: white;
+    font-weight: bold;
+    border: 1px solid black;
+}
+
+/* Table Rows */
+table tr {
+    background-color: #fff;
+    transition: background-color 0.2s ease-in-out;
+    border: 1px solid black;
+}
+
+/* Table Cells */
+table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border: 1px solid black;
+}
+
+/* Alternate Row Coloring */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover Effect */
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .search-input {
+        width: 100%;
+    }
+
+    table th,
+    table td {
+        padding: 10px;
+    }
+}
+
+/* Sortable header styling */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+/* Sorting indicator */
+th.sortable::after {
+    content: " ▲▼"; /* Adds up/down arrow for sorting */
+    font-size: 12px;
+    color: gray;
+    margin-left: 8px;
+}
+
+th.sortable.active[data-order="asc"]::after {
+    content: " ▲";
+    color: black;
+}
+
+th.sortable.active[data-order="desc"]::after {
+    content: " ▼";
+    color: black;
+}
+
+.table-footer {
+    width: 95%;
+    margin: 8px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.row-count {
+    position: static;
+    background: #f8f8f8;
+    padding: 4px 8px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+    flex: 0 1 auto;
+    max-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.page-info,
+.record-count {
+    white-space: nowrap;
+}
+
+.footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
+/* Pagination Buttons */
+.pagination {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.page-input-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 4px;
+}
+
+.page-number-input {
+    width: 40px;
+    padding: 2px 4px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 12px;
+    outline: none;
+}
+
+.pagination-button {
+    background-color: #007aff;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+    background-color: #0059b3;
+}
+
+/* Page Size Dropdown */
+.select-dropdown {
+    width: 120px;
+    padding: 6px 8px;
+    margin: 0;
+    display: inline-block;
+    border: 2px solid #007bff;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: white;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.row-actions-cell {
+    white-space: nowrap;
+}
+
+.row-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.row-action-button {
+    background-color: #007aff;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.row-action-button:hover {
+    background-color: #0059b3;
+}
+
+/* Focus & Hover Effects */
+.select-dropdown:hover, 
+.select-dropdown:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.6);
+}
+
+/* Styling Dropdown Options */
+.select-dropdown option {
+    background: #e3f2fd; /* Light blue background */
+    color: #0056b3;
+    font-size: 14px;
+    padding: 6px;
+}
+
+/* Hover Effect for Options (Only works in some browsers) */
+.select-dropdown option:checked {
+    background: #cce5ff; 
+    color: white;
+}
+
+/* Ensure dropdown arrow is visible */
+.select-dropdown::-ms-expand {
+    display: none;
+}
+
+/* Sortable header styling */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+/* Sorting indicator */
+th.sortable::after {
+    content: " ▲▼"; /* Adds up/down arrow for sorting */
+    font-size: 12px;
+    color: gray;
+    margin-left: 8px;
+}
+
+th.sortable.active[data-order="asc"]::after {
+    content: " ▲";
+    color: black;
+}
+
+th.sortable.active[data-order="desc"]::after {
+    content: " ▼";
+    color: black;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  height: auto;
+  overflow-y: auto;
+}
+
+.modal-body-content {
+  margin: 5% auto; 
+  padding: 40px;
+  width: 85%; 
+  text-align: left;
+  column-count: 2;
+  column-gap: 40px;
+  border: 1px solid #888;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-title {
+  font-size: 24px;
+  margin-bottom: 0px;
+  color: #333;
+  text-align: center;
+  font-weight: bold;
+}
+
+.action-button {
+    background-color: #007aff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    background-color: #0059b3;
+}
+
+.save-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    float: right;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    float: right;
+}

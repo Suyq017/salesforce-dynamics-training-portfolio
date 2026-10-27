@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExamType__c</fullName>
+    <label>試験タイプ</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>&apos;&apos;進捗&apos; - &apos;Progress&apos;</fullName>
+                <default>false</default>
+                <label>&apos;&apos;進捗&apos; - &apos;Progress&apos;</label>
+            </value>
+            <value>
+                <fullName>&apos;実技&apos; - &apos;Practical&apos;</fullName>
+                <default>false</default>
+                <label>&apos;実技&apos; - &apos;Practical&apos;</label>
+            </value>
+            <value>
+                <fullName>&apos;中間試験&apos; - &apos;Midterm Exam&apos;</fullName>
+                <default>false</default>
+                <label>&apos;中間試験&apos; - &apos;Midterm Exam&apos;</label>
+            </value>
+            <value>
+                <fullName>&apos; 期末試験&apos; - &apos;FinalTerm Exam&apos;</fullName>
+                <default>false</default>
+                <label>&apos; 期末試験&apos; - &apos;FinalTerm Exam&apos;</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

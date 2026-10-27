@@ -1,0 +1,347 @@
+<!--
+* ページ名：   VF_SearchStudent
+* 機能名：  　 学生検索ページ
+* @created： 2026/06/05 Nguyen Ngoc Quy
+* @modified： 2026/06/11 Nguyen Ngoc Quy
+-->
+<apex:page controller="VF_SearchStudentCtrl" showHeader="false" standardStylesheets="true" docType="html-5.0">
+<style>
+    .search-table{
+        width:100%;
+        border-collapse:collapse;
+    }
+
+    .search-table td{
+        padding:8px;
+    }
+
+    .search-label{
+        font-weight:bold;
+        white-space:nowrap;
+        width:100px;
+    }
+
+    .search-input input{
+        width:180px;
+    }
+
+    .search-container{
+        display:flex;
+        gap:20px;
+        align-items:stretch;
+        justify-content:left;
+    }		
+    
+    .search-field{
+        display:flex;
+        flex-direction:column;
+    }
+    
+    .search-field label{
+        font-weight:bold;
+        margin-bottom:5px;
+        height:20px;
+    }
+    
+    .search-field input,
+    .search-field select{
+        width:120px;
+        height:32px;
+        box-sizing:border-box;
+        margin:0;
+        padding:4px 8px;
+    }
+
+    .btn-search{
+        background:#0176d3 !important;
+        color:white !important;
+        border:1px solid #0176d3 !important;
+        width:80px;
+        height:32px;
+    }
+    
+    .btn-create{
+        background:white !important;
+        color:#0176d3 !important;
+        border:1px solid gray !important;
+        width:80px;
+        height:32px;
+    }
+    
+    .btn-normal{
+        border:1px solid gray !important;
+        background:white !important;
+        border-radius:4px;
+        padding:4px 12px;
+        cursor:pointer;
+        width:80px;
+        height:32px;
+    }
+
+    .page-number{
+        color:#0176d3 !important;
+        font-weight:bold;
+    }
+
+    .current-page{
+        background:#d92d20 !important;
+        color:white !important;
+        border:1px solid #d92d20 !important;
+        font-weight:bold;
+    }
+
+    .action-link{
+        margin-right:12px;
+    }
+
+    .pagination-container{
+        text-align:center;
+        margin-top:15px;
+    }
+
+    .pagination-container input{
+        min-width:36px;
+        height:32px;
+        margin:0 3px;
+        font-size:14px;
+    }
+
+    .results-container table{
+        width:100%;
+        table-layout:fixed;
+    }
+
+    .results-container th,
+    .results-container td{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    table.list th,
+    table.list td{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    .col-checkbox { width:40px; }
+    .col-code     { width:120px; }
+    .col-lastname { width:120px; }
+    .col-firstname{ width:120px; }
+    .col-birthday { width:120px; }
+    .col-gender   { width:80px; }
+    .col-class    { width:150px; }
+    .col-action   { width:120px; }
+
+    .results-container{
+        width:98%;
+        margin:0 auto;
+    }
+
+    .action-buttons{
+        margin-top:15px;
+    }
+    
+    .bPageBlock{
+        border: none !important;
+        box-shadow: none !important;
+    }
+</style>
+<apex:sectionHeader />
+<apex:messages />
+    <apex:form >
+        <apex:outputPanel id="deleteOverlay">
+            <apex:outputPanel rendered="{!showDeleteConfirm}">
+                
+                <div style="
+                    position:fixed;
+                    top:0; left:0;
+                    width:100%; height:100%;
+                    background:rgba(0,0,0,0.5);
+                    z-index:9998;">
+                </div>
+
+                <div style="
+                    position:fixed;
+                    top:50%; left:50%;
+                    transform:translate(-50%,-50%);
+                    background:white;
+                    padding:20px;
+                    border-radius:6px;
+                    z-index:9999;
+                    width:300px;
+                    text-align:center;">
+                    <h3>学生を削除</h3>
+                    <p>選択された学生を削除しますか？</p>
+
+                    <apex:commandButton value="キャンセル"
+                                        action="{!closeDeleteConfirm}"
+                                        rerender="deleteOverlay"
+                                        styleClass="btn-create"/>
+
+                    <apex:commandButton value="削除"
+                                        action="{!deleteStudent}"
+                                        rerender="results, pagination, selectedCount, deleteOverlay"
+                                        styleClass="btn-search"/>
+            </div>
+
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <apex:pageBlock id="searchBlock">
+            <div class="search-container">
+                <div class="search-field">
+                    <label>学生コード</label>
+                    <apex:inputText value="{!searchKey.studentCode}"/>
+                </div>
+                <div class="search-field">
+                    <label>氏名</label>
+                    <apex:inputText value="{!searchKey.studentName}"/>
+                </div>
+                <div class="search-field">
+                    <label>クラス</label>
+                    <apex:selectList value="{!searchKey.studentClass}" size="1">
+                        <apex:selectOption itemValue="" itemLabel="--なし--"/>
+                        <apex:selectOptions value="{!classOptions}"/>
+                    </apex:selectList>
+                </div>
+                <div class="search-field">
+                    <label>性別</label>
+                    <apex:selectList value="{!searchKey.studentGender}" size="1">
+                        <apex:selectOption itemValue="" itemLabel="--なし--"/>
+                        <apex:selectOptions value="{!genderOptions}"/>
+                    </apex:selectList>
+                </div>
+                <div class="search-field">
+                    <label>生年月日</label>
+                    <apex:input type="date" value="{!searchKey.studentBirthday}" />
+                </div>
+                <div class="search-field">
+                    <label>日付</label>
+                    <apex:selectList value="{!searchKey.dayOfBirth}" size="1">
+                        <apex:selectOption itemValue="" itemLabel="--"/>
+                        <apex:selectOptions value="{!dateOptions}"/>
+                    </apex:selectList>
+                </div>
+                <div class="search-field">
+                    <label>月</label>
+                    <apex:selectList value="{!searchKey.monthOfBirth}" size="1">
+                        <apex:selectOption itemValue="" itemLabel="--"/>
+                        <apex:selectOptions value="{!monthOptions}">
+                        </apex:selectOptions>
+                    </apex:selectList>
+                </div>
+                <div class="search-field">
+                    <label>年</label>
+                    <apex:selectList value="{!searchKey.yearOfBirth}" size="1">
+                        <apex:selectOption itemValue="" itemLabel="--"/>
+                        <apex:selectOptions value="{!yearOptions}">
+                        </apex:selectOptions>
+                    </apex:selectList>
+                </div>
+            </div>
+        </apex:pageBlock>      
+
+        <apex:pageBlock id="actionButtons">
+            <div class="action-buttons">
+                <apex:commandButton value="検索"
+                                    action="{!searchStudents}"
+                                    rerender="results, pagination, selectedCount, actionButtons"
+                                    styleClass="btn-search"/>
+                
+                <apex:commandButton value="作成"
+                                    action="{!openCreateStudentPage}"
+                                    styleClass="btn-create"/>
+                
+                <apex:commandButton value="クリア"
+                                    action="{!clearSearch}"
+                                    rerender="searchBlock, results, pagination, selectedCount, actionButtons"
+                                    styleClass="btn-normal"/>
+
+                
+                <apex:commandButton value="削除"
+                                    action="{!openDeleteMultipleConfirm}"
+                                    rerender="results, pagination, selectedCount, actionButtons, deleteOverlay"
+                                    styleClass="btn-normal"
+                                    disabled="{!selectedCount==0}"/>
+            </div>
+        </apex:pageBlock>
+
+    <div class="results-container">
+        <apex:pageBlock id="results" mode="view">
+            <apex:pageBlockTable value="{!studentsPaginated}" var="wrapper">
+                <apex:column styleClass="col-checkbox">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox value="{!selectAll}">
+                            <apex:actionSupport event="onclick"
+                                                action="{!toggleSelectAll}"
+                                                rerender="results, selectedCount"/>
+                        </apex:inputCheckbox>
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!wrapper.isSelected}">
+                        <apex:actionSupport event="onchange" rerender="selectedCount, actionButtons"/>
+                    </apex:inputCheckbox>
+                </apex:column>
+                <apex:column headerValue="学生コード" styleClass="col-code">
+                    <apex:outputLink value="/apex/VF_DetailStudent?id={!wrapper.student.Id}" target="_blank">
+                        {!wrapper.student.StudentCode__c}
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column headerValue="姓" styleClass="col-lastname">
+                    {!wrapper.student.Lastname__c}
+                </apex:column>
+                <apex:column headerValue="名" styleClass="col-firstname">
+                    {!wrapper.student.Firstname__c}
+                </apex:column>
+                <apex:column headerValue="生年月日" styleClass="col-birthday">
+                    <apex:outputText value="{0,date, MM/dd/yyyy}">
+                        <apex:param value="{!wrapper.student.Birthday__c}"/>
+                    </apex:outputText>
+                </apex:column>
+                <apex:column headerValue="性別" styleClass="col-gender">
+                    {!wrapper.student.Gender__c}
+                </apex:column>
+                <apex:column headerValue="クラス" styleClass="col-class">
+                    {!wrapper.student.Class_look__r.Name}
+                </apex:column>
+                <apex:column headerValue="アクション" styleClass="col-action">
+                    <apex:commandLink styleClass="action-link" action="{!openStudentDetailPage}">
+                        <apex:param name="studentId" value="{!wrapper.student.Id}" assignTo="{!studentId}"/>
+                        <apex:image url="{!URLFOR($Resource.IconZip, 'view.png')}" width="16" height="16"/>
+                    </apex:commandLink>
+                    <apex:commandLink styleClass="action-link" action="{!openEditStudentPage}">
+                        <apex:param name="studentId" value="{!wrapper.student.Id}" assignTo="{!studentId}"/>
+                        <apex:image url="{!URLFOR($Resource.IconZip, 'edit.png')}" width="16" height="16"/>
+                    </apex:commandLink>
+                    <apex:commandLink styleClass="action-link"
+                                      action="{!openDeleteConfirm}"
+                                      rerender="results, pagination, selectedCount, deleteOverlay">
+                        <apex:param name="studentId" value="{!wrapper.student.Id}" assignTo="{!studentId}"/>
+                        <apex:image url="{!URLFOR($Resource.IconZip, 'delete.png')}" width="16" height="16"/>
+                    </apex:commandLink>
+                </apex:column>
+            </apex:pageBlockTable>
+            <apex:outputPanel id="selectedCount">
+                <apex:outputText value="Selected: {!selectedCount} / {!totalRecords}" />
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </div>
+
+    <div class="pagination-container">
+        <apex:pageBlock id="pagination" mode="view">
+            <apex:commandButton value="<<" action="{!goToFirstPage}" rerender="results, pagination, selectedCount" disabled="{!IF(currentPage == 1, true, false)}"/>
+            <apex:commandButton value="<" action="{!goToPreviousPage}" rerender="results, pagination, selectedCount" disabled="{!IF(currentPage == 1, true, false)}"/>
+            <apex:repeat value="{!pageNumbers}" var="pageNum">
+                <apex:commandButton value="{!pageNum}"
+                                    action="{!goToPage}"
+                                    rerender="results, pagination, selectedCount"
+                                    styleClass="{!IF(pageNum=currentPage, 'current-page', 'page-number')}">
+                    <apex:param name="page" value="{!pageNum}" assignTo="{!currentPage}"/>
+                </apex:commandButton>
+            </apex:repeat>
+            <apex:commandButton value=">" action="{!goToNextPage}" rerender="results, pagination, selectedCount" disabled="{!IF(currentPage == totalPages, true, false)}"/>
+            <apex:commandButton value=">>" action="{!goToLastPage}" rerender="results, pagination, selectedCount" disabled="{!IF(currentPage == totalPages, true, false)}"/>
+        </apex:pageBlock>
+    </div>
+    </apex:form>    
+</apex:page>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LearningStatus__c</fullName>
+    <label>学習状況</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>&apos;&apos;在学中&apos; - &apos;Enrolled&apos;</fullName>
+                <default>false</default>
+                <label>&apos;&apos;在学中&apos; - &apos;Enrolled&apos;</label>
+            </value>
+            <value>
+                <fullName>&apos;退学&apos; - &apos;Withdrawn&apos;</fullName>
+                <default>false</default>
+                <label>&apos;退学&apos; - &apos;Withdrawn&apos;</label>
+            </value>
+            <value>
+                <fullName>&apos;卒業済み&apos; - &apos;Graduated&apos;</fullName>
+                <default>false</default>
+                <label>&apos;卒業済み&apos; - &apos;Graduated&apos;</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

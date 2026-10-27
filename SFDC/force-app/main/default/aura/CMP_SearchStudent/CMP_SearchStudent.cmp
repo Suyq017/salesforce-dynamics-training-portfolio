@@ -1,0 +1,237 @@
+<aura:component controller="CMP_SearchStudentCtrl" 
+                implements="force:appHostable, lightning:isUrlAddressable">
+
+    <!-- Search Key Attributes -->
+    <aura:attribute name="studentCodeSearch" type="String"/>
+    <aura:attribute name="studentNameSearch" type="String"/>
+    <aura:attribute name="classSearch" type="String"/>
+    <aura:attribute name="genderSearch" type="String"/>
+    <aura:attribute name="birthdaySearch" type="Date"/>
+    <aura:attribute name="dayOfBirthSearch" type="String"/>
+    <aura:attribute name="monthOfBirthSearch" type="String"/>
+    <aura:attribute name="yearOfBirthSearch" type="String"/>
+    <!-- Option List Attributes -->
+    <aura:attribute name="genderOptions" type="List"/>
+    <aura:attribute name="classOptions" type="List"/>
+    <aura:attribute name="dayOptions" type="List"/>
+    <aura:attribute name="monthOptions" type="List"/>
+    <aura:attribute name="yearOptions" type="List"/>
+
+    <!-- Data Attributes -->
+    <aura:attribute name="studentsList" type="List"/>
+    <aura:attribute name="currentPageListStudents" type="List"/>
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="totalPages" type="Integer" default="1"/>
+    <aura:attribute name="totalRecords" type="Integer" default="0"/>
+    <aura:attribute name="pageNums" type="List"/>
+    <aura:attribute name="selectedStudentsCount" type="Integer" default="0"/>
+    <aura:attribute name="isAnySearchkey" type="Boolean" default="false"/>
+
+    <!-- Boolean Attribute -->
+    <aura:attribute name="spinner" type="Boolean" default="false"/>
+    <aura:attribute name="allSelected" type="Boolean" default="false"/>
+
+    <!-- Custom settings attribute -->
+    <aura:attribute name="RecordPerPage" type="Integer" default="5"/>
+    <aura:attribute name="MaxRecord" type="Integer" default="2000"/>
+
+    <lightning:navigation aura:id="navService"/>
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.initAction}"/>
+    <aura:handler event="c:EVT_DeleteConfirm" action="{!c.handleDeleteStudentEvent}"/>
+
+     <aura:if isTrue="{!v.spinner}">
+        <div class="slds-spinner_container">
+            <lightning:spinner size="large" variant="brand"/>
+        </div>
+    </aura:if>
+        
+    <lightning:card>
+
+        <aura:set attribute="title">
+            <lightning:layout multipleRows="true">
+
+                    <lightning:input name="studentCodeSearch"
+                                label="学生コード"
+                                value="{!v.studentCodeSearch}"
+                                class="slds-m-right_medium"
+                                onchange="{!c.handleSearchChange}"/>
+
+                    <lightning:input name="studentNameSearch"
+                                label="名前"
+                                value="{!v.studentNameSearch}"
+                                class="slds-m-right_medium"
+                                onchange="{!c.handleSearchChange}"/>
+
+                    <lightning:select name="classSearch"
+                                    label="クラス"
+                                    value="{!v.classSearch}"
+                                    class="slds-m-right_medium"
+                                    onchange="{!c.handleSearchChange}">
+                        <option value="">--なし--</option>
+                        <aura:iteration items="{!v.classOptions}" var="option">
+                            <option value="{!option.value}" label="{!option.label}"/>
+                        </aura:iteration>
+                    </lightning:select>
+
+                    <lightning:select name="genderSearch"
+                                label="性別"
+                                value="{!v.genderSearch}"
+                                class="slds-m-right_medium"
+                                onchange="{!c.handleSearchChange}">
+                        <option value="">--なし--</option>
+                        <aura:iteration items="{!v.genderOptions}" var="option">
+                            <option value="{!option.value}" label="{!option.label}"/>
+                        </aura:iteration>
+                    </lightning:select>
+
+                    <lightning:input name="birthdaySearch"
+                                label="生年月日"
+                                type="date"
+                                dateStyle="short"
+                                value="{!v.birthdaySearch}"
+                                class="slds-m-right_medium"
+                                onchange="{!c.handleBirthdayChange}"/>
+                                
+                    <lightning:select name="dayOfBirthSearch"
+                                label="日生"
+                                value="{!v.dayOfBirthSearch}"
+                                class="slds-m-right_medium"
+                                onchange="{!c.handleDateChange}">
+                        <option value="">--なし--</option>
+                        <aura:iteration items="{!v.dayOptions}" var="option">
+                            <option value="{!option.value}" label="{!option.label}"/>
+                        </aura:iteration>
+                    </lightning:select>
+
+                    <lightning:select name="monthOfBirthSearch"
+                                label="月生"
+                                value="{!v.monthOfBirthSearch}"
+                                class="slds-m-right_medium"
+                                onchange="{!c.handleDateChange}">
+                        <option value="">--なし--</option>
+                        <aura:iteration items="{!v.monthOptions}" var="option">
+                            <option value="{!option.value}" label="{!option.label}"/>
+                        </aura:iteration>
+                    </lightning:select>
+
+                    <lightning:select name="yearOfBirthSearch"
+                                label="年生"
+                                value="{!v.yearOfBirthSearch}"
+                                class="slds-m-right_medium"
+                                onchange="{!c.handleDateChange}">
+                        <option value="">--なし--</option>
+                        <aura:iteration items="{!v.yearOptions}" var="option">
+                            <option value="{!option.value}" label="{!option.label}"/>
+                        </aura:iteration>
+                    </lightning:select>
+
+            </lightning:layout>
+
+            <lightning:layout>
+                <lightning:layoutItem padding="around-small">
+                    <lightning:button iconName="utility:search" 
+                                        label="検索" 
+                                        variant="brand" 
+                                        onclick="{!c.handleSearch}"
+                                        disabled="{!v.isAnySearchkey == false}"/>
+                    <lightning:button iconName="utility:add" 
+                                        label="作成" 
+                                        variant="neutral" 
+                                        onclick="{!c.handleCreateStudent}"/>
+                    <lightning:button iconName="utility:clear" 
+                                        label="クリア" 
+                                        variant="neutral" 
+                                        onclick="{!c.handleClearSearch}"
+                                        disabled="{!v.isAnySearchkey == false}"/>
+                    <lightning:button iconName="utility:delete" 
+                                         label="削除" 
+                                        variant="neutral" 
+                                        onclick="{!c.handleDeleteStudent}"
+                                        name="deleteListSelectedStudents"
+                                        disabled="{!v.selectedStudentsCount == 0}"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:set>
+
+        <aura:set attribute="body">
+            <div style="height: 250px; overflow-y: auto;">                
+                <table class="slds-table_bordered slds-table_cell-buffer slds-table_fixed-layout" table-layout="fixed">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="slds-border_bottom" width="5%">
+                                <lightning:input type="checkbox" 
+                                            name="selectAll" 
+                                            checked="{!v.allSelected}"
+                                            onchange="{!c.handleSelectAll}"/>
+                            </th>
+                            <th scope="col" class="slds-border_bottom" width="10%">学生コード</th>
+                            <th scope="col" class="slds-border_bottom" width="15%">姓</th>
+                            <th scope="col" class="slds-border_bottom" width="15%">名</th>
+                            <th scope="col" class="slds-border_bottom" width="15%">生年月日</th>
+                            <th scope="col" class="slds-border_bottom" width="10%">性別</th>
+                            <th scope="col" class="slds-border_bottom" width="15%">クラス</th>
+                            <th scope="col" class="slds-border_bottom" width="15%">アクション</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.currentPageListStudents}" var="student">
+                            <tr>
+                                <td><lightning:input type="checkbox" 
+                                                    name="{!student.Id}" 
+                                                    checked="{!student.isSelected}"
+                                                    onchange="{!c.handleSelectStudent}"/>
+                                </td>
+                                <td><lightning:button label="{!student.StudentCode__c}" 
+                                                    variant="base"
+                                                    name="viewDetailFromCode"
+                                                    value="{!student.Id}"
+                                                    onclick="{!c.handleViewDetail}"/>
+                                </td>
+                                <td >{!student.Lastname__c}</td>
+                                <td>{!student.Firstname__c}</td>
+                                <td>{!student.Birthday__c}</td>
+                                <td>{!student.Gender__c}</td>
+                                <td>{!student.Class_look__r.Name}</td>
+                                <td>    
+                                    <lightning:button iconName="utility:preview" 
+                                                    variant="base" 
+                                                    onclick="{!c.handleViewDetail}"
+                                                    value="{!student.Id}"
+                                                    name="viewDetailFromIcon"/>
+                                    <lightning:button iconName="utility:edit" 
+                                                    variant="base" 
+                                                    onclick="{!c.handleViewUpdate}"
+                                                    value="{!student.Id}"/>
+                                    <lightning:button iconName="utility:delete" 
+                                                    variant="base" 
+                                                    onclick="{!c.handleDeleteStudent}"
+                                                    name="deleteSpecificIdStudent"
+                                                    value="{!student.Id}"/>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            Selected {!v.selectedStudentsCount} / {!v.totalRecords}
+            </div>
+        </aura:set>
+        
+
+        <aura:set attribute="footer">
+            <lightning:button label="&lt;&lt;" variant="neutral" onclick="{!c.handleFirstPage}" disabled="{!v.currentPage == 1}"/>
+            <lightning:button label="&lt;" variant="neutral" onclick="{!c.handlePreviousPage}" disabled="{!v.currentPage == 1}"/>
+            <aura:iteration items="{!v.pageNums}" var="pageNum">
+                <lightning:button label="{!pageNum}" 
+                                    variant="{!(pageNum == v.currentPage) ? 'brand' : 'neutral'}" 
+                                    onclick="{!c.handlePageChange}"
+                                    value="{!pageNum}"/>
+            </aura:iteration>
+            <lightning:button label="&gt;" variant="neutral" onclick="{!c.handleNextPage}" disabled="{!v.currentPage == v.totalPages}"/>
+            <lightning:button label="&gt;&gt;" variant="neutral" onclick="{!c.handleLastPage}" disabled="{!v.currentPage == v.totalPages}"/>
+        </aura:set>
+
+    </lightning:card>
+
+</aura:component>

@@ -1,0 +1,26 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    
+    <aura:attribute name="studentIds" type="List" />
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+    <lightning:layout horizontalAlign="center" multipleRows="true">
+        <lightning:layoutItem size="12">
+            <lightning:formattedText value="この学生の削除を実行しますか？" 
+                                    class="slds-text-heading_medium slds-text-align_center"/>
+        </lightning:layoutItem>
+
+    </lightning:layout>
+
+    <lightning:layout>
+        <lightning:layoutItem size="12" class="slds-text-align_right slds-m-top_large">
+            <lightning:button variant="neutral" 
+                                label="キャンセル" 
+                                onclick="{!c.handleClose}"
+                                class="slds-m-right_small"/>
+            <lightning:button variant="brand" 
+                                label="削除" 
+                                onclick="{!c.handleDelete}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

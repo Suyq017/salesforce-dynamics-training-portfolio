@@ -1,0 +1,135 @@
+<!--
+ * lwc_CreateStudent.html
+ * 学生情報を作成するためのLWCコンポーネントのHTMLテンプレートです。
+ * @created 2026/06/22 Nguyen Ngoc Quy
+ * @modified 2026/07/13 Nguyen Ngoc Quy
+ -->
+<template>
+    <template lwc:if={isOpened}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container slds-p-top_x-small slds-p-bottom_x-small">
+
+                <button class="slds-button slds-button_icon slds-modal__close" onclick={handleClose} aria-hidden="true">
+                    <lightning-icon size="small" icon-name="utility:close" alternative-text="Close"></lightning-icon>
+                </button>
+
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">新規学生</h1>
+                </div>
+
+                <div class="slds-modal__content slds-p-around_medium modalContent" id="modal-content-id-1">
+
+                    <template lwc:if={spinner}>
+                        <div class="slds-is-relative spinner">
+                            <lightning-spinner alternative-text="Loading" 
+                                                size="large"></lightning-spinner>
+                        </div>
+                    </template>
+
+                    <template lwc:if={student}>
+
+                        <lightning-layout multiple-rows="true" class="slds-p-horizontal_small">
+
+                            <lightning-layout-item size="12">
+                                <lightning-input label="姓" value={student.Lastname__c}
+                                                            onchange={handleInputChange}
+                                                            required
+                                                            data-field-type="requiredField"
+                                                            name="Lastname">
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12">
+                                <lightning-input label="名" value={student.Firstname__c}
+                                                            onchange={handleInputChange}
+                                                            required
+                                                            data-field-type="requiredField"
+                                                            name="Firstname">
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12">
+                                <lightning-input label="生年月日" 
+                                                type="date" 
+                                                date-style="short" 
+                                                value={student.Birthday__c}
+                                                required
+                                                onchange={handleInputChange}
+                                                data-field-type="birthdayField"
+                                                name="Birthday">
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12">
+                                <lightning-combobox data-field-type="requiredField" 
+                                                name="Gender" 
+                                                label="性別" 
+                                                required
+                                                value={student.Gender__c}
+                                                placeholder="--なし--"
+                                                options={genderOptions}
+                                                onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12">
+                                <lightning-combobox data-field-type="requiredField" 
+                                                name="Class" 
+                                                label="クラス" 
+                                                required
+                                                value={student.Class_look__c}
+                                                placeholder="--なし--"
+                                                options={classOptions}
+                                                onchange={handleInputChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12">
+                                <!-- 2026/07/13 Nguyen Ngoc Quy Modified Start -->
+                                <!-- <lightning-combobox data-field-type="requiredField" 
+                                                name="LearningStatus" 
+                                                label="学習状況" 
+                                                required
+                                                value={student.LearningStatus__c}
+                                                placeholder="--なし--"
+                                                options={learningStatusOptions}
+                                                onchange={handleInputChange}>
+                                </lightning-combobox> -->
+                                <lightning-combobox data-field-type="requiredField" 
+                                                name="LearningStatus" 
+                                                label="学習状況" 
+                                                value={student.LearningStatus__c}
+                                                placeholder="--なし--"
+                                                options={learningStatusOptions}
+                                                onchange={handleInputChange}>
+                                </lightning-combobox>
+                                <!-- 2026/07/13 Nguyen Ngoc Quy Modified End -->
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        
+                    </template>
+
+                </div>
+
+                <div class="slds-modal__footer slds-modal__footer_directional">
+                    <lightning-layout class="slds-float_right">
+                        <lightning-layout-item size="12" class="slds-text-align_right slds-m-top_medium">
+                            <lightning-button variant="neutral" 
+                                            label="キャンセル" 
+                                            onclick={handleClose}
+                                            class="slds-m-right_small">
+                            </lightning-button>
+                            <lightning-button variant="brand" 
+                                            label="保存" 
+                                            onclick={handleSaveStudent}
+                                            disabled={spinner}>
+                            </lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </div>
+        </section>
+    
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>

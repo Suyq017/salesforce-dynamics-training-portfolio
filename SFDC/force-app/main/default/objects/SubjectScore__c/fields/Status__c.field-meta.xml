@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>ステータス</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>&apos;合格&apos; - Passed</fullName>
+                <default>false</default>
+                <label>&apos;合格&apos; - Passed</label>
+            </value>
+            <value>
+                <fullName>&apos;不合格&apos; - &apos;Not Passed&apos;</fullName>
+                <default>false</default>
+                <label>&apos;不合格&apos; - &apos;Not Passed&apos;</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
